@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,8 @@ interface AddGoalModalProps {
   open: boolean;
   onClose: () => void;
   onAddGoal: (goal: SavingsGoal) => void;
+  editingGoal?: SavingsGoal | null;
+  onEditGoal?: (goal: SavingsGoal) => void;
 }
 
 const colorOptions = [
@@ -22,7 +24,13 @@ const colorOptions = [
 
 const iconOptions = ["💰", "🏠", "🚗", "✈️", "💻", "📱", "👕", "🎓", "🎁"];
 
-const AddGoalModal: React.FC<AddGoalModalProps> = ({ open, onClose, onAddGoal }) => {
+const AddGoalModal: React.FC<AddGoalModalProps> = ({ 
+  open, 
+  onClose, 
+  onAddGoal, 
+  editingGoal, 
+  onEditGoal 
+}) => {
   const [goalName, setGoalName] = useState("");
   const [targetAmount, setTargetAmount] = useState("");
   const [currentAmount, setCurrentAmount] = useState("");
@@ -31,11 +39,25 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({ open, onClose, onAddGoal })
   const [selectedColor, setSelectedColor] = useState(colorOptions[0].value);
   const [selectedIcon, setSelectedIcon] = useState(iconOptions[0]);
 
+  useEffect(() => {
+    if (editingGoal) {
+      setGoalName(editingGoal.name);
+      setTargetAmount(editingGoal.targetAmount.toString());
+      setCurrentAmount(editingGoal.currentAmount.toString());
+      setMonthlyContribution(editingGoal.monthlyContribution?.toString() || "");
+      setDueDate(editingGoal.dueDate || "");
+      setSelectedColor(editingGoal.color);
+      setSelectedIcon(editingGoal.icon);
+    } else {
+      resetForm();
+    }
+  }, [editingGoal]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const newGoal: SavingsGoal = {
-      id: Date.now().toString(),
+    const goalData: SavingsGoal = {
+      id: editingGoal ? editingGoal.id : Date.now().toString(),
       name: goalName,
       icon: selectedIcon,
       currentAmount: parseFloat(currentAmount) || 0,
@@ -45,7 +67,12 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({ open, onClose, onAddGoal })
       dueDate: dueDate || undefined,
     };
     
-    onAddGoal(newGoal);
+    if (editingGoal && onEditGoal) {
+      onEditGoal(goalData);
+    } else {
+      onAddGoal(goalData);
+    }
+    
     resetForm();
     onClose();
   };
@@ -64,7 +91,9 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({ open, onClose, onAddGoal })
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="bg-app-dark-lighter text-white border-gray-800 max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-white">Add New Savings Goal</DialogTitle>
+          <DialogTitle className="text-white">
+            {editingGoal ? "Edit Savings Goal" : "Add New Savings Goal"}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -181,7 +210,7 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({ open, onClose, onAddGoal })
               type="submit" 
               className="bg-app-green hover:bg-app-green/90 text-white"
             >
-              Save Goal
+              {editingGoal ? "Update Goal" : "Save Goal"}
             </Button>
           </div>
         </form>

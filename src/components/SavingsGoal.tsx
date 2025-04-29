@@ -11,9 +11,10 @@ import {
 interface SavingsGoalProps {
   goal: SavingsGoalType;
   onDeleteClick: (goalId: string) => void;
+  onEditClick: (goal: SavingsGoalType) => void;
 }
 
-const SavingsGoal: React.FC<SavingsGoalProps> = ({ goal, onDeleteClick }) => {
+const SavingsGoal: React.FC<SavingsGoalProps> = ({ goal, onDeleteClick, onEditClick }) => {
   const progress = Math.min((goal.currentAmount / goal.targetAmount) * 100, 100);
   const formattedProgress = Math.round(progress);
   
@@ -24,7 +25,7 @@ const SavingsGoal: React.FC<SavingsGoalProps> = ({ goal, onDeleteClick }) => {
   
   return (
     <ContextMenu>
-      <ContextMenuTrigger>
+      <ContextMenuTrigger className="block cursor-pointer">
         <div className="flex items-center p-3.5 bg-app-dark-lighter rounded-xl mb-2.5">
           <div className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center mr-3">
             <span className="text-base">{goal.icon}</span>
@@ -91,6 +92,12 @@ const SavingsGoal: React.FC<SavingsGoalProps> = ({ goal, onDeleteClick }) => {
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent className="bg-app-dark-lighter border-gray-700">
+        <ContextMenuItem 
+          className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 focus:bg-blue-900/20 focus:text-blue-300 cursor-pointer text-xs"
+          onClick={() => onEditClick(goal)}
+        >
+          Edit Goal
+        </ContextMenuItem>
         <ContextMenuItem 
           className="text-red-400 hover:text-red-300 hover:bg-red-900/20 focus:bg-red-900/20 focus:text-red-300 cursor-pointer text-xs"
           onClick={() => onDeleteClick(goal.id)}

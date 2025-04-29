@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 const Index = () => {
   const [activeTab, setActiveTab] = useState("goals");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingGoal, setEditingGoal] = useState<SavingsGoalType | null>(null);
   const [deleteGoalId, setDeleteGoalId] = useState<string | null>(null);
   const [goalToDelete, setGoalToDelete] = useState<SavingsGoalType | null>(null);
   const { toast } = useToast();
@@ -66,6 +67,21 @@ const Index = () => {
     setGoals([...goals, goal]);
   };
   
+  const handleEditGoal = (updatedGoal: SavingsGoalType) => {
+    setGoals(goals.map(goal => goal.id === updatedGoal.id ? updatedGoal : goal));
+    setEditingGoal(null);
+    
+    toast({
+      title: "Goal updated",
+      description: `"${updatedGoal.name}" has been updated successfully.`,
+    });
+  };
+  
+  const handleEditClick = (goal: SavingsGoalType) => {
+    setEditingGoal(goal);
+    setIsAddModalOpen(true);
+  };
+  
   const handleDeleteClick = (goalId: string) => {
     const goal = goals.find(g => g.id === goalId);
     if (goal) {
@@ -92,6 +108,11 @@ const Index = () => {
     setDeleteGoalId(null);
     setGoalToDelete(null);
   };
+  
+  const handleModalClose = () => {
+    setIsAddModalOpen(false);
+    setEditingGoal(null);
+  };
 
   return (
     <MobileLayout>
@@ -117,8 +138,9 @@ const Index = () => {
                 {goals.map((goal) => (
                   <SavingsGoal 
                     key={goal.id} 
-                    goal={goal} 
+                    goal={goal}
                     onDeleteClick={handleDeleteClick}
+                    onEditClick={handleEditClick}
                   />
                 ))}
               </div>
@@ -167,8 +189,10 @@ const Index = () => {
         
         <AddGoalModal 
           open={isAddModalOpen} 
-          onClose={() => setIsAddModalOpen(false)} 
+          onClose={handleModalClose}
           onAddGoal={handleAddGoal}
+          editingGoal={editingGoal}
+          onEditGoal={handleEditGoal}
         />
         
         <DeleteConfirmationDialog
