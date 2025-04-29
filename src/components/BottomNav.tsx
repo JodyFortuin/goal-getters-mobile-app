@@ -45,8 +45,8 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab }) => {
           )}
           onClick={() => setActiveTab(tab.id)}
         >
-          <tab.icon size={20} />
-          <span className="text-xs mt-1">{tab.label}</span>
+          <tab.icon size={18} />
+          <span className="text-[10px] mt-1 font-medium tracking-tight">{tab.label}</span>
         </button>
       ))}
     </div>

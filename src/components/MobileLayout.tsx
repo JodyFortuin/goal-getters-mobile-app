@@ -17,7 +17,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({ children }) => {
     <div className="flex items-center justify-center min-h-screen bg-black p-4">
       <div className="phone-frame">
         <div className="status-bar">
-          <span>{time}</span>
+          <span className="text-xs font-medium">{time}</span>
           <div className="flex items-center space-x-2">
             <div className="w-4 h-4">
               {/* Signal icon */}

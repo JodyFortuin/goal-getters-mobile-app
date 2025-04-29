@@ -18,26 +18,26 @@ const SavingsHeader: React.FC<SavingsHeaderProps> = ({ totalSavings }) => {
     <div className="px-4 pt-4 pb-6 bg-app-dark">
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center">
-          <div className="bg-app-green/20 w-8 h-8 rounded-md flex items-center justify-center mr-2">
+          <div className="bg-app-green/20 w-7 h-7 rounded-md flex items-center justify-center mr-2">
             <span className="text-app-green font-bold">$</span>
           </div>
-          <h1 className="text-xl font-semibold text-white">GoalGetters</h1>
+          <h1 className="text-lg font-semibold text-white">GoalGetters</h1>
           <div className="ml-2 px-2 py-0.5 bg-amber-500/20 rounded-md">
-            <span className="text-xs text-amber-500 font-medium">Pro</span>
+            <span className="text-[9px] text-amber-500 font-medium">Pro</span>
           </div>
         </div>
         <button className="p-2">
-          <Settings size={20} className="text-gray-300" />
+          <Settings size={18} className="text-gray-300" />
         </button>
       </div>
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-gray-400 text-sm">Savings Manager</h2>
-          <p className="text-xs text-gray-500">{currentDate}</p>
+          <h2 className="text-gray-400 text-xs">Savings Manager</h2>
+          <p className="text-[10px] text-gray-500">{currentDate}</p>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold text-white">${totalSavings.toLocaleString()}</p>
-          <p className="text-xs text-gray-400">Total Savings</p>
+          <p className="text-xl font-bold text-white">${totalSavings.toLocaleString()}</p>
+          <p className="text-[10px] text-gray-400">Total Savings</p>
         </div>
       </div>
     </div>
