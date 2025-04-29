@@ -23,10 +23,15 @@ const SavingsGoal: React.FC<SavingsGoalProps> = ({ goal, onDeleteClick, onEditCl
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
   
+  const handleOpenChange = (open: boolean) => {
+    // Ensure the context menu opens when the component is clicked
+    console.log("Context menu open state:", open);
+  };
+
   return (
-    <ContextMenu>
-      <ContextMenuTrigger className="block cursor-pointer">
-        <div className="flex items-center p-3.5 bg-app-dark-lighter rounded-xl mb-2.5">
+    <ContextMenu onOpenChange={handleOpenChange}>
+      <ContextMenuTrigger asChild>
+        <div className="flex items-center p-3.5 bg-app-dark-lighter rounded-xl mb-2.5 cursor-pointer">
           <div className="w-9 h-9 bg-gray-800 rounded-full flex items-center justify-center mr-3">
             <span className="text-base">{goal.icon}</span>
           </div>
