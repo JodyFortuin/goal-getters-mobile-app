@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Settings } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface SavingsHeaderProps {
   totalSavings: number;
@@ -22,9 +23,12 @@ const SavingsHeader: React.FC<SavingsHeaderProps> = ({ totalSavings }) => {
             <span className="text-app-green font-bold">$</span>
           </div>
           <h1 className="text-lg font-semibold text-white">GoalGetters</h1>
-          <div className="ml-2 px-2 py-0.5 bg-amber-500/20 rounded-md">
+          <Badge 
+            variant="outline"
+            className="ml-2 px-2 py-0.5 bg-amber-500/20 border-0 flex items-center justify-center"
+          >
             <span className="text-[9px] text-amber-500 font-medium">Pro</span>
-          </div>
+          </Badge>
         </div>
         <button className="p-2">
           <Settings size={18} className="text-gray-300" />
