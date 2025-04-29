@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import SavingsHeader from "@/components/SavingsHeader";
@@ -70,6 +69,7 @@ const Index = () => {
   const handleEditGoal = (updatedGoal: SavingsGoalType) => {
     setGoals(goals.map(goal => goal.id === updatedGoal.id ? updatedGoal : goal));
     setEditingGoal(null);
+    setIsAddModalOpen(false);
     
     toast({
       title: "Goal updated",
@@ -78,6 +78,7 @@ const Index = () => {
   };
   
   const handleEditClick = (goal: SavingsGoalType) => {
+    console.log("Edit clicked for goal:", goal.name);
     setEditingGoal(goal);
     setIsAddModalOpen(true);
   };
@@ -146,6 +147,7 @@ const Index = () => {
               </div>
               
               {goals.length === 0 && (
+                
                 <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
                   <div className="w-16 h-16 bg-app-green/20 rounded-full flex items-center justify-center mb-4">
                     <span className="text-2xl">💰</span>
@@ -164,6 +166,7 @@ const Index = () => {
               )}
             </>
           )}
+          
           
           {activeTab === "savings" && (
             <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
