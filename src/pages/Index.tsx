@@ -5,13 +5,19 @@ import SavingsHeader from "@/components/SavingsHeader";
 import SavingsGoal from "@/components/SavingsGoal";
 import BottomNav from "@/components/BottomNav";
 import AddGoalModal from "@/components/AddGoalModal";
+import DeleteConfirmationDialog from "@/components/DeleteConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import { SavingsGoal as SavingsGoalType } from "@/types";
 import { Plus } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("goals");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [deleteGoalId, setDeleteGoalId] = useState<string | null>(null);
+  const [goalToDelete, setGoalToDelete] = useState<SavingsGoalType | null>(null);
+  const { toast } = useToast();
+  
   const [goals, setGoals] = useState<SavingsGoalType[]>([
     {
       id: "1",
@@ -59,6 +65,33 @@ const Index = () => {
   const handleAddGoal = (goal: SavingsGoalType) => {
     setGoals([...goals, goal]);
   };
+  
+  const handleDeleteClick = (goalId: string) => {
+    const goal = goals.find(g => g.id === goalId);
+    if (goal) {
+      setGoalToDelete(goal);
+      setDeleteGoalId(goalId);
+    }
+  };
+  
+  const handleDeleteConfirm = () => {
+    if (deleteGoalId) {
+      setGoals(goals.filter(goal => goal.id !== deleteGoalId));
+      
+      toast({
+        title: "Goal deleted",
+        description: `"${goalToDelete?.name}" has been deleted successfully.`,
+      });
+      
+      setDeleteGoalId(null);
+      setGoalToDelete(null);
+    }
+  };
+  
+  const handleDeleteCancel = () => {
+    setDeleteGoalId(null);
+    setGoalToDelete(null);
+  };
 
   return (
     <MobileLayout>
@@ -82,7 +115,11 @@ const Index = () => {
               
               <div className="space-y-3">
                 {goals.map((goal) => (
-                  <SavingsGoal key={goal.id} goal={goal} />
+                  <SavingsGoal 
+                    key={goal.id} 
+                    goal={goal} 
+                    onDeleteClick={handleDeleteClick}
+                  />
                 ))}
               </div>
               
@@ -132,6 +169,13 @@ const Index = () => {
           open={isAddModalOpen} 
           onClose={() => setIsAddModalOpen(false)} 
           onAddGoal={handleAddGoal}
+        />
+        
+        <DeleteConfirmationDialog
+          open={Boolean(deleteGoalId)}
+          goalName={goalToDelete?.name || ""}
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
         />
       </div>
       

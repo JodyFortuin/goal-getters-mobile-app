@@ -1,12 +1,14 @@
 
 import React from "react";
 import { SavingsGoal as SavingsGoalType, ProgressColor } from "@/types";
+import { Trash2 } from "lucide-react";
 
 interface SavingsGoalProps {
   goal: SavingsGoalType;
+  onDeleteClick: (goalId: string) => void;
 }
 
-const SavingsGoal: React.FC<SavingsGoalProps> = ({ goal }) => {
+const SavingsGoal: React.FC<SavingsGoalProps> = ({ goal, onDeleteClick }) => {
   const progress = Math.min((goal.currentAmount / goal.targetAmount) * 100, 100);
   const formattedProgress = Math.round(progress);
   
@@ -50,32 +52,41 @@ const SavingsGoal: React.FC<SavingsGoalProps> = ({ goal }) => {
         )}
       </div>
       
-      <div className="relative w-11 h-11 flex items-center justify-center">
-        <svg width="42" height="42" className="rotate-[-90deg]">
-          <circle
-            cx="21"
-            cy="21"
-            r={radius}
-            strokeWidth="3.5"
-            stroke={`#${goal.color}33`}
-            fill="transparent"
-            className="progress-circle-bg"
-          />
-          <circle
-            cx="21"
-            cy="21"
-            r={radius}
-            strokeWidth="3.5"
-            stroke={`#${goal.color}`}
-            fill="transparent"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            className="progress-circle animate-pulse-glow"
-          />
-        </svg>
-        <span className="absolute text-[10px] font-semibold text-white">
-          {formattedProgress}%
-        </span>
+      <div className="relative flex items-center">
+        <div className="relative w-11 h-11 flex items-center justify-center">
+          <svg width="42" height="42" className="rotate-[-90deg]">
+            <circle
+              cx="21"
+              cy="21"
+              r={radius}
+              strokeWidth="3.5"
+              stroke={`#${goal.color}33`}
+              fill="transparent"
+              className="progress-circle-bg"
+            />
+            <circle
+              cx="21"
+              cy="21"
+              r={radius}
+              strokeWidth="3.5"
+              stroke={`#${goal.color}`}
+              fill="transparent"
+              strokeDasharray={circumference}
+              strokeDashoffset={strokeDashoffset}
+              className="progress-circle animate-pulse-glow"
+            />
+          </svg>
+          <span className="absolute text-[10px] font-semibold text-white">
+            {formattedProgress}%
+          </span>
+        </div>
+        <button 
+          onClick={() => onDeleteClick(goal.id)} 
+          className="ml-2 p-1.5 text-gray-400 hover:text-red-400 rounded-full hover:bg-red-900/20 transition-colors"
+          aria-label="Delete goal"
+        >
+          <Trash2 size={15} />
+        </button>
       </div>
     </div>
   );
